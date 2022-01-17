@@ -1,6 +1,5 @@
 import Foundation
 import Metal
-import XCTest
 
 
 struct Day {
@@ -22,6 +21,10 @@ struct Day {
         self.events = events
         self.icon = icon
     }
+}
+
+struct Week {
+    let days: [Day]
 }
 
 enum CalendarConstants: Int {
@@ -69,11 +72,10 @@ enum CalendarConstants: Int {
 
         return (month, dateComps.day!, dayOfWeek)
     }
-
 }
+
 protocol CalendarSource {
-    
     var title: String { get }
     var footnote: String { get }
-    var days: [Day] { get }
+    var weeks: [Week] { get }
 }

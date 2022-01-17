@@ -9,6 +9,15 @@
 /* Begin PBXBuildFile section */
 		2E09D4E027891F7800D8AE8A /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E09D4DF27891F7800D8AE8A /* icons.swift */; };
 		2E09D4E3278DF01100D8AE8A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E09D4E2278DF01100D8AE8A /* XCTest.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		2E09D4EB278EA29200D8AE8A /* TermCalendarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E09D4EA278EA29200D8AE8A /* TermCalendarApp.swift */; };
+		2E09D4ED278EA29200D8AE8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E09D4EC278EA29200D8AE8A /* ContentView.swift */; };
+		2E09D4EF278EA29400D8AE8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E09D4EE278EA29400D8AE8A /* Assets.xcassets */; };
+		2E09D4F2278EA29400D8AE8A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E09D4F1278EA29400D8AE8A /* Preview Assets.xcassets */; };
+		2E09D4F727910FD800D8AE8A /* Quartermaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFA176F27854F9E00DC8304 /* Quartermaster.swift */; };
+		2E09D4F92791110100D8AE8A /* EKEventStore+Hack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E09D4F82791110100D8AE8A /* EKEventStore+Hack.swift */; };
+		2E09D4FA2791110100D8AE8A /* EKEventStore+Hack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E09D4F82791110100D8AE8A /* EKEventStore+Hack.swift */; };
+		2E09D4FB279114A700D8AE8A /* CalendarSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFA177227854F9E00DC8304 /* CalendarSource.swift */; };
+		2E09D4FC279114EF00D8AE8A /* NSObject+EventKitHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */; };
 		2E8EB6B62787F0A2003B0981 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 2E8EB6B52787F0A2003B0981 /* ArgumentParser */; settings = {ATTRIBUTES = (Required, ); }; };
 		2E8EB6BA27881360003B0981 /* NSObject+EventKitHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */; };
 		2EFA177327854F9E00DC8304 /* Quartermaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFA176F27854F9E00DC8304 /* Quartermaster.swift */; };
@@ -32,6 +41,15 @@
 /* Begin PBXFileReference section */
 		2E09D4DF27891F7800D8AE8A /* icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = icons.swift; sourceTree = "<group>"; };
 		2E09D4E2278DF01100D8AE8A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		2E09D4E8278EA29200D8AE8A /* TermCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TermCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E09D4EA278EA29200D8AE8A /* TermCalendarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermCalendarApp.swift; sourceTree = "<group>"; };
+		2E09D4EC278EA29200D8AE8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2E09D4EE278EA29400D8AE8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2E09D4F1278EA29400D8AE8A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2E09D4F3278EA29400D8AE8A /* TermCalendar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TermCalendar.entitlements; sourceTree = "<group>"; };
+		2E09D4F82791110100D8AE8A /* EKEventStore+Hack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Hack.swift"; sourceTree = "<group>"; };
+		2E25DA6F279172CF00DEB33C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2E25DA702795C35900DEB33C /* ResultBuilderTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultBuilderTemplate.swift; sourceTree = "<group>"; };
 		2E8EB6B72788135F003B0981 /* termcalendar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "termcalendar-Bridging-Header.h"; sourceTree = "<group>"; };
 		2E8EB6B827881360003B0981 /* NSObject+EventKitHack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+EventKitHack.h"; sourceTree = "<group>"; };
 		2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+EventKitHack.m"; sourceTree = "<group>"; };
@@ -43,6 +61,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2E09D4E5278EA29200D8AE8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2EFA175B27854B3C00DC8304 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -63,10 +88,32 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2E09D4E9278EA29200D8AE8A /* TermCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				2E25DA6F279172CF00DEB33C /* Info.plist */,
+				2E09D4EA278EA29200D8AE8A /* TermCalendarApp.swift */,
+				2E09D4EC278EA29200D8AE8A /* ContentView.swift */,
+				2E09D4EE278EA29400D8AE8A /* Assets.xcassets */,
+				2E09D4F3278EA29400D8AE8A /* TermCalendar.entitlements */,
+				2E09D4F0278EA29400D8AE8A /* Preview Content */,
+			);
+			path = TermCalendar;
+			sourceTree = "<group>";
+		};
+		2E09D4F0278EA29400D8AE8A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				2E09D4F1278EA29400D8AE8A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		2EFA175527854B3C00DC8304 = {
 			isa = PBXGroup;
 			children = (
 				2EFA176027854B3C00DC8304 /* termcalendar */,
+				2E09D4E9278EA29200D8AE8A /* TermCalendar */,
 				2EFA175F27854B3C00DC8304 /* Products */,
 				2E09D4E1278DF01000D8AE8A /* Frameworks */,
 			);
@@ -76,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				2EFA175E27854B3C00DC8304 /* termcalendar */,
+				2E09D4E8278EA29200D8AE8A /* TermCalendar.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -91,6 +139,8 @@
 				2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */,
 				2E8EB6B72788135F003B0981 /* termcalendar-Bridging-Header.h */,
 				2E09D4DF27891F7800D8AE8A /* icons.swift */,
+				2E09D4F82791110100D8AE8A /* EKEventStore+Hack.swift */,
+				2E25DA702795C35900DEB33C /* ResultBuilderTemplate.swift */,
 			);
 			path = termcalendar;
 			sourceTree = "<group>";
@@ -98,6 +148,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2E09D4E7278EA29200D8AE8A /* TermCalendar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2E09D4F4278EA29400D8AE8A /* Build configuration list for PBXNativeTarget "TermCalendar" */;
+			buildPhases = (
+				2E09D4E4278EA29200D8AE8A /* Sources */,
+				2E09D4E5278EA29200D8AE8A /* Frameworks */,
+				2E09D4E6278EA29200D8AE8A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TermCalendar;
+			productName = TermCalendar;
+			productReference = 2E09D4E8278EA29200D8AE8A /* TermCalendar.app */;
+			productType = "com.apple.product-type.application";
+		};
 		2EFA175D27854B3C00DC8304 /* termcalendar */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2EFA176527854B3C00DC8304 /* Build configuration list for PBXNativeTarget "termcalendar" */;
@@ -128,6 +195,9 @@
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
+					2E09D4E7278EA29200D8AE8A = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
 					2EFA175D27854B3C00DC8304 = {
 						CreatedOnToolsVersion = 13.2.1;
 						LastSwiftMigration = 1320;
@@ -151,11 +221,37 @@
 			projectRoot = "";
 			targets = (
 				2EFA175D27854B3C00DC8304 /* termcalendar */,
+				2E09D4E7278EA29200D8AE8A /* TermCalendar */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		2E09D4E6278EA29200D8AE8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E09D4F2278EA29400D8AE8A /* Preview Assets.xcassets in Resources */,
+				2E09D4EF278EA29400D8AE8A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		2E09D4E4278EA29200D8AE8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E09D4FC279114EF00D8AE8A /* NSObject+EventKitHack.m in Sources */,
+				2E09D4ED278EA29200D8AE8A /* ContentView.swift in Sources */,
+				2E09D4FB279114A700D8AE8A /* CalendarSource.swift in Sources */,
+				2E09D4F727910FD800D8AE8A /* Quartermaster.swift in Sources */,
+				2E09D4EB278EA29200D8AE8A /* TermCalendarApp.swift in Sources */,
+				2E09D4FA2791110100D8AE8A /* EKEventStore+Hack.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2EFA175A27854B3C00DC8304 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -165,6 +261,7 @@
 				2EFA177327854F9E00DC8304 /* Quartermaster.swift in Sources */,
 				2EFA177627854F9E00DC8304 /* CalendarSource.swift in Sources */,
 				2E8EB6BA27881360003B0981 /* NSObject+EventKitHack.m in Sources */,
+				2E09D4F92791110100D8AE8A /* EKEventStore+Hack.swift in Sources */,
 				2EFA177527854F9E00DC8304 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -172,6 +269,66 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		2E09D4F5278EA29400D8AE8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TermCalendar/TermCalendar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TermCalendar/Preview Content\"";
+				DEVELOPMENT_TEAM = MYU6NE7WY6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermCalendar/Info.plist;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "TermCalendar needs access to your calendars in order to display that info in the output table.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.appel-rockhold.TermCalendar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "termcalendar/termcalendar-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		2E09D4F6278EA29400D8AE8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TermCalendar/TermCalendar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TermCalendar/Preview Content\"";
+				DEVELOPMENT_TEAM = MYU6NE7WY6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermCalendar/Info.plist;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "TermCalendar needs access to your calendars in order to display that info in the output table.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.appel-rockhold.TermCalendar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "termcalendar/termcalendar-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		2EFA176327854B3C00DC8304 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -331,6 +488,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2E09D4F4278EA29400D8AE8A /* Build configuration list for PBXNativeTarget "TermCalendar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E09D4F5278EA29400D8AE8A /* Debug */,
+				2E09D4F6278EA29400D8AE8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2EFA175927854B3C00DC8304 /* Build configuration list for PBXProject "termcalendar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

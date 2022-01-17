@@ -8,41 +8,6 @@
 import Foundation
 import EventKit
 
-extension EKEventStore {
-    static func getStore() -> EKEventStore {
-        
-        // Stupid little Hack, discovered by Dirk Scheidt for the ReminderListExport project
-        // https://mitt-woch.de/images/media/ReminderListExport.zip
-        // It serves here as a replacement for the EKEventStore constructor.
-        let store = EventKitHack().permCheck()
-        
-        guard #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) else {
-            print("Unsupported OS version error")
-            fatalError()
-        }
-        
-        store.reset()
-        
-        let _ = Task {
-            do  {
-                let ok = try await store.requestAccess(to: .event)
-                guard ok else { fatalError() }
-            }
-            catch {
-                fatalError()
-            }
-        }
-        return store
-    }
-        
-    func calendar(where f: (EKCalendar)->Bool) -> EKCalendar? {
-        for c in self.calendars(for: .event) {
-            if f(c) { return c }
-        }
-        return nil
-    }
-}
-
 extension Date: Strideable {
     static let SECONDS_PER_DAY: TimeInterval = 60*60*24
     
@@ -114,9 +79,9 @@ class Quartermaster: CalendarSource {
     
     let title: String
     let footnote: String
-    let days: [Day]
+    let weeks: [Week]
     
-    init(calendarname: String,
+    init(events: [EKEvent],
          firstDay b: Date,
          lastDay e: Date,
          title: String,
@@ -124,13 +89,8 @@ class Quartermaster: CalendarSource {
         
         self.title = title
         self.footnote = footnote
-        let store = EKEventStore.getStore()
         let session = DateInterval(start: b, end: e)
-        
-        guard let calendar = store.calendar(where: { c in c.title == calendarname }) else {
-            throw QuartermasterError.NoMatchingCalendar
-        }
-        
+                
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
@@ -149,20 +109,27 @@ class Quartermaster: CalendarSource {
         eventMap.addEvent(b, "The First Day of the Quarter")
         eventMap.addEvent(e, "The Last Day of the Quarter")
         
-        store.events(matching: store.predicateForEvents(withStart: b,
-                                                        end: e,
-                                                        calendars: [calendar]))
+        events
             .forEach { event in
                 eventMap.addEvent(event.startDate, event.title)
             }
         
-        self.days = stride(from: firstCalendarDay,
-                           to: firstDayOfNextCalendar,
-                           by: Date.SECONDS_PER_DAY)
+        var days: [Day] = stride(from: firstCalendarDay,
+                            to: firstDayOfNextCalendar,
+                            by: Date.SECONDS_PER_DAY)
             .map { date in
-                
                 let defaultDay = Day(date, inSession: session.contains(date))
                 return eventMap[defaultDay.shortDate, default: defaultDay]
             }
+        
+        self.weeks = {
+            var _weeks = [Week]()
+            while !days.isEmpty {
+                let week = Week(days: [Day](days.prefix(7)))
+                _weeks.append(week)
+                days.removeFirst(min(days.count, 7))
+            }
+            return _weeks
+        }()
     }
 }
