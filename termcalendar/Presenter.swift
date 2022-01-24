@@ -30,15 +30,6 @@ struct EmptyElement: Element {
     }
 }
 
-struct ElementGroup: Element {
-    let contents: [Element]
-    func emit() -> String {
-        return contents.map {
-            $0.emit()
-        }
-        .joined(separator: "\n")
-    }
-}
 
 extension String: Element {
     func emit() -> String {
@@ -53,9 +44,8 @@ struct StylesBuilder {
     
     // Combines an array of partial results into a single partial result. A result builder must implement this method.
     static func buildBlock(_ components: Component...) -> Component {
-        return Array(components.joined())
+        return components.flatMap { $0 }
     }
-
     static func buildBlock(_ components: Expression...) -> Component {
         return components.map {
             Style($0)
@@ -67,8 +57,6 @@ struct StylesBuilder {
 struct TableHeaderBuilder {
     typealias Expression = ColumnHeader
     typealias Component = [ColumnHeader]
-//    typealias FinalResult = [ColumnHeader]
-        
     static func buildEither(first component: Component) -> Component {
         return component
     }
@@ -119,12 +107,15 @@ struct TableRowBuilder {
 
 @resultBuilder
 struct BodyBuilder {
-    typealias Component = Element
-    typealias FinalResult = ElementGroup
-//    typealias Expression = Element
-
+    typealias Expression = Element
+    typealias Component = [Element]
+    
+    static func buildExpression(_ expression: Expression) -> Component {
+        return [expression]
+    }
+    
     static func buildOptional(_ component: Component?) -> Component {
-        guard let component = component else { return EmptyElement() }
+        guard let component = component else { return Component() }
         return component
     }
     static func buildEither(first component: Component) -> Component {
@@ -134,14 +125,10 @@ struct BodyBuilder {
         return component
     }
     static func buildArray(_ components: [Component]) -> Component {
-        return ElementGroup(contents: components)
+        return  components.flatMap { $0 }
     }
     static func buildBlock(_ components: Component...) -> Component {
-        return ElementGroup(contents: components)
-    }
-    
-    static func buildFinalResult(_ component: Component) -> FinalResult {
-        return ElementGroup(contents: [component])
+        return  components.flatMap { $0 }
     }
 }
 
@@ -200,17 +187,21 @@ struct Style: Emitable {
 }
 
 struct Head: Emitable {
-    @StylesBuilder let styles: [Style]
+    let styles: [Style]
+    
+    init(@StylesBuilder content: () -> [Style]) {
+        styles = content()
+    }
     
     func emit() -> String {
-        return "<head>"
-        + "<style>"
+        return "<head>\n"
+        + "<style>\n"
         + styles.map { style in
             style.emit()
         }
         .joined(separator: "\n")
-        + "</style>"
-        + "</head>"
+        + "\n</style>"
+        + "\n</head>"
     }
 }
 
@@ -221,12 +212,19 @@ struct Footer: Emitable {
 }
 
 struct Body: Emitable {
-    @BodyBuilder let contents: ElementGroup
+    let contents: [Element]
+    
+    init(@BodyBuilder content: () -> [Element]) {
+        contents = content()
+    }
     
     func emit() -> String {
         "<BODY>"
-        + contents.emit()
-        + "</BODY>"
+        + contents.map {
+            $0.emit()
+        }
+        .joined(separator: "\n")
+        + "\n</BODY>"
     }
 }
 
@@ -241,7 +239,7 @@ struct H: Element {
 }
 
 struct BR: Element {
-    func emit() -> String { "<br/>" }
+    func emit() -> String { "<br/>\n" }
 }
 
 struct P: Element {
@@ -255,7 +253,7 @@ struct P: Element {
         if let text = text {
             return "<P>\(text)</P>"
         } else {
-            return "<P>"
+            return "<P>\n"
         }
     }
 }
@@ -263,22 +261,50 @@ struct P: Element {
 
 struct Table: Element {
     let header: TableHeader
-    @RowsBuilder let rows: [TableRow]
+    let rows: [TableRow]
+    
+    init(header: TableHeader, @RowsBuilder rows: () -> [TableRow]) {
+        self.header = header
+        self.rows = rows()
+    }
     
     func emit() -> String {
-        "<table></table>"
+        "<table>\n"
+        + header.emit()
+        + "\n"
+        + rows.map {
+            $0.emit()
+        }
+        .joined(separator: "\n")
+        + "\n</table>"
     }
 }
 
 
 struct RowHeader: Element {
-    let text: String
-    init(_ t: String, klass: String? = nil) {
-        text = t
+    let klass: String?
+    let contents: [Element]
+    
+    init(klass: String? = nil, @BodyBuilder content: () -> [Element]) {
+        self.klass = klass
+        contents = content()
     }
     
     func emit() -> String {
-        "<th scope=\"row\">\(text)</th>"
+        
+        let klassStr: String
+        if klass == nil {
+            klassStr = ""
+        }
+        else {
+            klassStr = " class=\"\(klass!)\""
+        }
+        
+        return "<th scope=\"row\"\(klassStr)>"
+        + contents.map {
+            $0.emit()
+        }.joined(separator: "\n")
+        + "</th>"
     }
 }
 
@@ -293,7 +319,11 @@ struct ColumnHeader: Element {
 }
 
 struct TableHeader: Emitable {
-    @TableHeaderBuilder var columnHeaders: [ColumnHeader]
+    var columnHeaders: [ColumnHeader]
+    
+    init(@TableHeaderBuilder columnHeaders: () -> [ColumnHeader]) {
+        self.columnHeaders = columnHeaders()
+    }
     
     func emit() -> String {
         return "<TR>"
@@ -307,22 +337,35 @@ struct TableHeader: Emitable {
 
 struct TableCell: Element {
     let klass: String?
-    @BodyBuilder let contents: ElementGroup
+    let contents: [Element]
+    
+    init(klass: String, @BodyBuilder contents: () -> [Element]) {
+        self.klass = klass
+        self.contents = contents()
+    }
     
     func emit() -> String {
         return (klass == nil ? "<TD>" : "<TD class=\"\(klass!)\">")
-        + contents.emit()
+        + contents.map {
+            $0.emit()
+        }
+        .joined(separator: "")
         + "</TD>"
     }
 }
 
 struct TableRow: Emitable {
     let header: RowHeader
+    var row: [TableCell]
     
-    @TableRowBuilder var row: [TableCell]
+    init(header: RowHeader, @TableRowBuilder tableCells: () -> [TableCell]) {
+        self.header = header
+        self.row = tableCells()
+    }
     
     func emit() -> String {
         return "<TR>"
+        + header.emit()
         + row.map {
             $0.emit()
         }
@@ -345,7 +388,6 @@ struct Img: Element {
 class Presenter {
     let calendarSource: CalendarSource
     let weekWidth: Int
-    var weekCount = 0
     
     init(_ cs: CalendarSource, weekWidth: Int) {
         self.calendarSource = cs
@@ -355,7 +397,7 @@ class Presenter {
     func present() -> HTMLDocument {
         
         return HTMLDocument(docType: "html",
-                            head: Head(styles: {
+                            head: Head {
                                         """
                                         table, th, td {
                                             border: 1px solid black;
@@ -385,7 +427,7 @@ class Presenter {
                                             height: 60px;
                                         }
                                         """
-                                }),
+        },
                             body: Body {
             
             H(level: 1, text: calendarSource.title)
@@ -394,13 +436,13 @@ class Presenter {
                 header: TableHeader {
                     ColumnHeader("Week")
                     
-                    for (name, i) in dayOfWeekName[0..<weekWidth].enumerated() {
+                    for name in dayOfWeekName[0..<weekWidth] {
                         ColumnHeader("\(name)")
                     }
                 },
                 rows: {
                     
-                    for (i, week) in calendarSource.weeks.enumerated() {
+                    for (weekIndex, week) in calendarSource.weeks.enumerated() {
                         
                         let firstDay = week.days.first!
                         let lastDay = week.days.last!
@@ -408,9 +450,13 @@ class Presenter {
                         ? "\(monthName[firstDay.month.rawValue])"
                         : "\(monthName[firstDay.month.rawValue]) - \(monthName[lastDay.month.rawValue])"
                         
-                        TableRow(header: RowHeader("\(weekCount)\n\(headerText)", klass: "rowHeader")) {
+                        TableRow(header: RowHeader(klass: "rowHeader", content: {
+                            "\(weekIndex+1)"
+                            BR()
+                            headerText
+                        })) {
                             
-                            for (j, day) in week.days.enumerated() {
+                            for day in week.days[0..<weekWidth] {
                                 
                                 TableCell(klass: day.inSession ? "classDay" : "noClassDay") {
                                     

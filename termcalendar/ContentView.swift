@@ -21,7 +21,7 @@ struct ContentView: View {
     private let store: EKEventStore
     private let calendars: [UUID:EKCalendar]
     private let calendarIDs: [UUID]
-
+    
     @State private var titleText = ""
     @State private var footnoteText = ""
     
@@ -62,11 +62,11 @@ struct ContentView: View {
                     Text(calendars[calID]!.title).tag(calID)
                 }
             }
-
+            
             TextField("Title", text: $titleText)
-
+            
             TextField("Footnote", text: $footnoteText)
-                        
+            
             DatePicker("First Day",
                        selection: $firstDayPickerSelection,
                        displayedComponents: [.date])
@@ -82,34 +82,60 @@ struct ContentView: View {
                 }
             
             Button(action: {
-                print("SAVING")
-                print("Title : \(titleText)")
-                print("Footer: \(footnoteText)")
-                print("Selected Calendar: \(selectedCalendar)")
                 
-                
-                
-                
+                createCalendarGrid()
                 
             }) {
-                Label("Save", systemImage: "square.and.arrow.down")
+                Label("Open in Browser", systemImage: "safari")
             }
             .disabled(saveNotAvailable())
-            
-            NavigationLink("Link to Calendar Document", destination: Text("file:///var/foo.html"))
-
         }
         .padding()
         Spacer()
     }
+    
+    
+    func createCalendarGrid() {
+        
+        guard let eventCalendar = store.calendar(where: { c in UUID(uuidString: c.calendarIdentifier)! == selectedCalendar }) else {
+            
+            print(Quartermaster.QuartermasterError.NoMatchingCalendar)
+            return
+        }
+        let events = store.events(matching: store.predicateForEvents(withStart: firstDayPickerSelection,
+                                                                     end: lastDayPickerSelection,
+                                                                     calendars: [eventCalendar]))
+        
+        do {
+            let q = try Quartermaster(events: events,
+                                      firstDay: firstDayPickerSelection,
+                                      lastDay: lastDayPickerSelection,
+                                      title: titleText,
+                                      footnote: footnoteText)
+            let document = Presenter(q, weekWidth: 5).present()
+            let text = document.emit()
+            
+            // generate temporary file
+            let filemanager = FileManager.default
+            let tempDirURL = filemanager.temporaryDirectory
+            let fileURL = tempDirURL.appendingPathComponent(UUID().uuidString).appendingPathExtension("html")
+            
+            // write content to it
+            try text.write(to: fileURL, atomically: true, encoding: .utf8)
+            
+            // open it in Safari
+            NSWorkspace.shared.open(fileURL)
+            
+        }
+        catch {
+            print(error)
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(store: EKEventStore.getStore())
     }
-}
-
-func save() {
-    print("SAVING CALENDAR FILE")
 }

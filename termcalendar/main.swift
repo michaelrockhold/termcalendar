@@ -23,7 +23,7 @@ struct termcalendar: ParsableCommand {
     mutating func run() throws {
         
         guard #available(macOS 10.15, *) else {
-            print("This code only runs on macOS 10.15 and up")
+            debugPrint("ERROR: This code only runs on macOS 10.15 and up")
             return
         }
         
@@ -53,7 +53,7 @@ struct termcalendar: ParsableCommand {
             print(document.emit())
         }
         catch {
-            print("ERROR \(error)")
+            debugPrint("ERROR \(error)")
             throw error
         }
     }
