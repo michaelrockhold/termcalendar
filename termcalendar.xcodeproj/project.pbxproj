@@ -20,6 +20,10 @@
 		2E09D4FC279114EF00D8AE8A /* NSObject+EventKitHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */; };
 		2E25DA7127971AA400DEB33C /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFA177027854F9E00DC8304 /* Presenter.swift */; };
 		2E25DA7227971C4A00DEB33C /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E09D4DF27891F7800D8AE8A /* icons.swift */; };
+		2E25DA74279E2F9D00DEB33C /* HTMLGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E25DA73279E2F9D00DEB33C /* HTMLGen.swift */; };
+		2E25DA75279E2F9D00DEB33C /* HTMLGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E25DA73279E2F9D00DEB33C /* HTMLGen.swift */; };
+		2E25DA77279E2FB000DEB33C /* LaTeXGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E25DA76279E2FB000DEB33C /* LaTeXGen.swift */; };
+		2E25DA78279E2FB000DEB33C /* LaTeXGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E25DA76279E2FB000DEB33C /* LaTeXGen.swift */; };
 		2E8EB6B62787F0A2003B0981 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 2E8EB6B52787F0A2003B0981 /* ArgumentParser */; settings = {ATTRIBUTES = (Required, ); }; };
 		2E8EB6BA27881360003B0981 /* NSObject+EventKitHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */; };
 		2EFA177327854F9E00DC8304 /* Quartermaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFA176F27854F9E00DC8304 /* Quartermaster.swift */; };
@@ -52,6 +56,8 @@
 		2E09D4F82791110100D8AE8A /* EKEventStore+Hack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Hack.swift"; sourceTree = "<group>"; };
 		2E25DA6F279172CF00DEB33C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2E25DA702795C35900DEB33C /* ResultBuilderTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultBuilderTemplate.swift; sourceTree = "<group>"; };
+		2E25DA73279E2F9D00DEB33C /* HTMLGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLGen.swift; sourceTree = "<group>"; };
+		2E25DA76279E2FB000DEB33C /* LaTeXGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaTeXGen.swift; sourceTree = "<group>"; };
 		2E8EB6B72788135F003B0981 /* termcalendar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "termcalendar-Bridging-Header.h"; sourceTree = "<group>"; };
 		2E8EB6B827881360003B0981 /* NSObject+EventKitHack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+EventKitHack.h"; sourceTree = "<group>"; };
 		2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+EventKitHack.m"; sourceTree = "<group>"; };
@@ -143,6 +149,8 @@
 				2E09D4DF27891F7800D8AE8A /* icons.swift */,
 				2E09D4F82791110100D8AE8A /* EKEventStore+Hack.swift */,
 				2E25DA702795C35900DEB33C /* ResultBuilderTemplate.swift */,
+				2E25DA73279E2F9D00DEB33C /* HTMLGen.swift */,
+				2E25DA76279E2FB000DEB33C /* LaTeXGen.swift */,
 			);
 			path = termcalendar;
 			sourceTree = "<group>";
@@ -249,8 +257,10 @@
 				2E25DA7127971AA400DEB33C /* Presenter.swift in Sources */,
 				2E25DA7227971C4A00DEB33C /* icons.swift in Sources */,
 				2E09D4ED278EA29200D8AE8A /* ContentView.swift in Sources */,
+				2E25DA75279E2F9D00DEB33C /* HTMLGen.swift in Sources */,
 				2E09D4FB279114A700D8AE8A /* CalendarSource.swift in Sources */,
 				2E09D4F727910FD800D8AE8A /* Quartermaster.swift in Sources */,
+				2E25DA78279E2FB000DEB33C /* LaTeXGen.swift in Sources */,
 				2E09D4EB278EA29200D8AE8A /* TermCalendarApp.swift in Sources */,
 				2E09D4FA2791110100D8AE8A /* EKEventStore+Hack.swift in Sources */,
 			);
@@ -265,8 +275,10 @@
 				2EFA177327854F9E00DC8304 /* Quartermaster.swift in Sources */,
 				2EFA177627854F9E00DC8304 /* CalendarSource.swift in Sources */,
 				2E8EB6BA27881360003B0981 /* NSObject+EventKitHack.m in Sources */,
+				2E25DA77279E2FB000DEB33C /* LaTeXGen.swift in Sources */,
 				2E09D4F92791110100D8AE8A /* EKEventStore+Hack.swift in Sources */,
 				2EFA177527854F9E00DC8304 /* main.swift in Sources */,
+				2E25DA74279E2F9D00DEB33C /* HTMLGen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,7 +30,6 @@ struct EmptyElement: Element {
     }
 }
 
-
 extension String: Element {
     func emit() -> String {
         return self
@@ -38,8 +37,8 @@ extension String: Element {
 }
 
 @resultBuilder
-struct StylesBuilder {
-    typealias Component = [Style]
+struct StylesBuilder<G: Generator> {
+    typealias Component = [G.Style]
     typealias Expression = String
     
     // Combines an array of partial results into a single partial result. A result builder must implement this method.
@@ -48,15 +47,15 @@ struct StylesBuilder {
     }
     static func buildBlock(_ components: Expression...) -> Component {
         return components.map {
-            Style($0)
+            G.Style($0)
         }
     }
 }
 
 @resultBuilder
-struct TableHeaderBuilder {
-    typealias Expression = ColumnHeader
-    typealias Component = [ColumnHeader]
+struct TableHeaderBuilder<G: Generator> {
+    typealias Expression = G.ColumnHeader
+    typealias Component = [G.ColumnHeader]
     static func buildEither(first component: Component) -> Component {
         return component
     }
@@ -78,16 +77,16 @@ struct TableHeaderBuilder {
 }
 
 @resultBuilder
-struct TableRowBuilder {
-    typealias Component = [TableCell]
-    typealias Expression = TableCell
+struct TableRowBuilder<G: Generator> {
+    typealias Component = [G.TableCell]
+    typealias Expression = G.TableCell
     
     static func buildExpression(_ expression: Expression) -> Component {
         return [expression]
     }
     
     static func buildOptional(_ component: Component?) -> Component {
-        guard let component = component else { return [TableCell]() }
+        guard let component = component else { return [G.TableCell]() }
         return component
     }
     static func buildEither(first component: Component) -> Component {
@@ -134,15 +133,15 @@ struct BodyBuilder {
 
 
 @resultBuilder
-struct RowsBuilder {
-    typealias Component = [TableRow]
-    typealias Expression = TableRow
+struct RowsBuilder<G: Generator> {
+    typealias Component = [G.TableRow]
+    typealias Expression = G.TableRow
     
     static func buildExpression(_ element: Expression) -> Component {
         return [element]
     }
     static func buildOptional(_ component: Component?) -> Component {
-        guard let component = component else { return [TableRow]() }
+        guard let component = component else { return [G.TableRow]() }
         return component
     }
     static func buildEither(first component: Component) -> Component {
@@ -159,285 +158,84 @@ struct RowsBuilder {
     }
 }
 
-struct HTMLDocument: Emitable {
-    let docType: String
-    let head: Head
-    let body: Body
-    let footer: Footer
+protocol Document_: Emitable { }
+protocol Head_: Emitable { }
+protocol Body_: Emitable { }
+protocol Footer_: Emitable { }
+protocol Style_: Emitable {
+    init(_ s: String)
+}
+protocol H_: Element { }
+protocol BR_: Element { }
+protocol P_: Element { }
+protocol Table_: Element { }
+protocol RowHeader_: Element { }
+protocol ColumnHeader_: Element { }
+protocol TableHeader_: Emitable { }
+protocol TableCell_: Element { }
+protocol TableRow_: Emitable { }
+protocol Img_: Element { }
+
+protocol Generator {
+    associatedtype Style: Style_
+    associatedtype Document: Document_
+    associatedtype Head: Head_
+    associatedtype Body: Body_
+    associatedtype Footer: Footer_
+    associatedtype H: H_
+    associatedtype BR: BR_
+    associatedtype P: P_
+    associatedtype Table: Table_
+    associatedtype TableHeader: TableHeader_
+    associatedtype TableCell: TableCell_
+    associatedtype ColumnHeader: ColumnHeader_
+    associatedtype TableRow: TableRow_
+    associatedtype RowHeader: RowHeader_
+    associatedtype Img: Img_
     
-    func emit() -> String {
-        return "<!DOCTYPE \(docType)><html>"
-        + head.emit()
-        + body.emit()
-        + footer.emit()
-        + "</html>"
-    }
+    
+    func document(head: Head, body: Body, footer: Footer) -> Document
+    func head() -> Head
+    func body(@BodyBuilder content: () -> [Element]) -> Body
+    func footer() -> Footer
+    
+    func h(level: Int, text: String) -> H
+    func br() -> BR
+    func p() -> P
+    func img(_ icon: Day.Icon, width: Int, height: Int) -> Img
+    
+    func table(header: TableHeader, @RowsBuilder<Self> rows: () -> [TableRow]) -> Table
+    func tableHeader(@TableHeaderBuilder<Self> columnHeaders: () -> [ColumnHeader]) -> TableHeader
+    func columnHeader(_ text: String) -> ColumnHeader
+    func rowHeader(klass: String?, @BodyBuilder content: () -> [Element]) -> RowHeader
+    func tableRow(header: RowHeader, @TableRowBuilder<Self> tableCells: () -> [TableCell]) -> TableRow
+    func tableCell(klass: String, @BodyBuilder contents: () -> [Element]) -> TableCell
 }
 
-struct Style: Emitable {
-    let directive: String
-    
-    init(_ d: String) {
-        directive = d
-    }
-    
-    func emit() -> String {
-        return directive
-    }
-}
-
-struct Head: Emitable {
-    let styles: [Style]
-    
-    init(@StylesBuilder content: () -> [Style]) {
-        styles = content()
-    }
-    
-    func emit() -> String {
-        return "<head>\n"
-        + "<style>\n"
-        + styles.map { style in
-            style.emit()
-        }
-        .joined(separator: "\n")
-        + "\n</style>"
-        + "\n</head>"
-    }
-}
-
-struct Footer: Emitable {
-    func emit() -> String {
-        ""
-    }
-}
-
-struct Body: Emitable {
-    let contents: [Element]
-    
-    init(@BodyBuilder content: () -> [Element]) {
-        contents = content()
-    }
-    
-    func emit() -> String {
-        "<BODY>"
-        + contents.map {
-            $0.emit()
-        }
-        .joined(separator: "\n")
-        + "\n</BODY>"
-    }
-}
-
-
-struct H: Element {
-    let level: Int
-    let text: String
-    
-    func emit() -> String {
-        return "<h\(level)>\(text)</h\(level)>"
-    }
-}
-
-struct BR: Element {
-    func emit() -> String { "<br/>\n" }
-}
-
-struct P: Element {
-    let text: String?
-    
-    init(_ t: String? = nil ) {
-        text = t
-    }
-    
-    func emit() -> String {
-        if let text = text {
-            return "<P>\(text)</P>"
-        } else {
-            return "<P>\n"
-        }
-    }
-}
-
-
-struct Table: Element {
-    let header: TableHeader
-    let rows: [TableRow]
-    
-    init(header: TableHeader, @RowsBuilder rows: () -> [TableRow]) {
-        self.header = header
-        self.rows = rows()
-    }
-    
-    func emit() -> String {
-        "<table>\n"
-        + header.emit()
-        + "\n"
-        + rows.map {
-            $0.emit()
-        }
-        .joined(separator: "\n")
-        + "\n</table>"
-    }
-}
-
-
-struct RowHeader: Element {
-    let klass: String?
-    let contents: [Element]
-    
-    init(klass: String? = nil, @BodyBuilder content: () -> [Element]) {
-        self.klass = klass
-        contents = content()
-    }
-    
-    func emit() -> String {
-        
-        let klassStr: String
-        if klass == nil {
-            klassStr = ""
-        }
-        else {
-            klassStr = " class=\"\(klass!)\""
-        }
-        
-        return "<th scope=\"row\"\(klassStr)>"
-        + contents.map {
-            $0.emit()
-        }.joined(separator: "\n")
-        + "</th>"
-    }
-}
-
-struct ColumnHeader: Element {
-    let text: String
-    init(_ t: String, klass: String? = nil) {
-        text = t
-    }
-    func emit() -> String {
-        "<th scope=\"col\">\(text)</th>"
-    }
-}
-
-struct TableHeader: Emitable {
-    var columnHeaders: [ColumnHeader]
-    
-    init(@TableHeaderBuilder columnHeaders: () -> [ColumnHeader]) {
-        self.columnHeaders = columnHeaders()
-    }
-    
-    func emit() -> String {
-        return "<TR>"
-        + columnHeaders.map {
-            $0.emit()
-        }
-        .joined(separator: "")
-        + "</TR>"
-    }
-}
-
-struct TableCell: Element {
-    let klass: String?
-    let contents: [Element]
-    
-    init(klass: String, @BodyBuilder contents: () -> [Element]) {
-        self.klass = klass
-        self.contents = contents()
-    }
-    
-    func emit() -> String {
-        return (klass == nil ? "<TD>" : "<TD class=\"\(klass!)\">")
-        + contents.map {
-            $0.emit()
-        }
-        .joined(separator: "")
-        + "</TD>"
-    }
-}
-
-struct TableRow: Emitable {
-    let header: RowHeader
-    var row: [TableCell]
-    
-    init(header: RowHeader, @TableRowBuilder tableCells: () -> [TableCell]) {
-        self.header = header
-        self.row = tableCells()
-    }
-    
-    func emit() -> String {
-        return "<TR>"
-        + header.emit()
-        + row.map {
-            $0.emit()
-        }
-        .joined(separator: "")
-        + "</TR>"
-    }
-}
-
-struct Img: Element {
-    let src: String
-    let alt: String
-    let width: Int
-    let height: Int
-    
-    func emit() -> String {
-        return "<img src=\"\(src)\" alt=\"\(alt)\" width=\"\(width)\" height=\"\(height)\" />"
-    }
-}
-
-class Presenter {
+class Presenter<G: Generator> {
     let calendarSource: CalendarSource
+    let g: G
     let weekWidth: Int
     
-    init(_ cs: CalendarSource, weekWidth: Int) {
+    init(_ cs: CalendarSource, generator: G, weekWidth: Int) where G: Generator {
         self.calendarSource = cs
+        self.g = generator
         self.weekWidth = weekWidth
     }
     
-    func present() -> HTMLDocument {
+    func present() -> G.Document {
         
-        return HTMLDocument(docType: "html",
-                            head: Head {
-                                        """
-                                        table, th, td {
-                                            border: 1px solid black;
-                                        }
-                                        """
-                                        """
-                                        .noClassDay {
-                                            background-color: lightgrey;
-                                            text-align:center;
-                                            width: 100px;
-                                            height: 60px;
-                                        }
-                                        """
-                                        """
-                                        .classDay {
-                                            background-color: white;
-                                            text-align:center;
-                                            width: 100px;
-                                            height: 60px;
-                                        }
-                                        """
-                                        """
-                                        .rowHeader {
-                                            background-color: darkgrey;
-                                            text-align:center;
-                                            width: 90px;
-                                            height: 60px;
-                                        }
-                                        """
-        },
-                            body: Body {
+        return g.document(head: g.head(),
+                          body: g.body {
             
-            H(level: 1, text: calendarSource.title)
+            g.h(level: 1, text: calendarSource.title)
             
-            Table(
-                header: TableHeader {
-                    ColumnHeader("Week")
+            g.table(
+                header: g.tableHeader {
+                    g.columnHeader("Week")
                     
                     for name in dayOfWeekName[0..<weekWidth] {
-                        ColumnHeader("\(name)")
+                        g.columnHeader("\(name)")
                     }
                 },
                 rows: {
@@ -450,27 +248,26 @@ class Presenter {
                         ? "\(monthName[firstDay.month.rawValue])"
                         : "\(monthName[firstDay.month.rawValue]) - \(monthName[lastDay.month.rawValue])"
                         
-                        TableRow(header: RowHeader(klass: "rowHeader", content: {
+                        g.tableRow(header: g.rowHeader(klass: "rowHeader", content: {
                             "\(weekIndex+1)"
-                            BR()
+                            g.br()
                             headerText
                         })) {
                             
                             for day in week.days[0..<weekWidth] {
                                 
-                                TableCell(klass: day.inSession ? "classDay" : "noClassDay") {
+                                g.tableCell(klass: day.inSession ? "classDay" : "noClassDay") {
                                     
                                     "\(day.dayOfMonth)"
                                     
-                                    BR()
+                                    g.br()
                                     
                                     "\(day.events.first ?? "")"
                                     
-                                    BR()
+                                    g.br()
                                     
-                                    let tuple = icon(for: day.icon)
-                                    if tuple != nil {
-                                        Img(src: tuple!.0, alt: tuple!.1, width: 30, height: 30)
+                                    if day.icon != nil {
+                                        g.img(day.icon!, width: 30, height: 30)
                                     }
                                 }
                             }
@@ -478,22 +275,8 @@ class Presenter {
                     }
                 })
             
-            H(level: 3, text: calendarSource.footnote)
+            g.h(level: 3, text: calendarSource.footnote)
         },
-                            
-                            footer: Footer())
+                          footer: g.footer())
     }
 }
-
-func icon(for icon: Day.Icon?) -> (String,String)? {
-    guard let icon = icon else {
-        return nil
-    }
-    switch icon {
-    case .Canvas:
-        return ("data:image/png;base64,\(canvasIconBase64)==", "Canvas sesssion")
-    case .Zoom:
-        return ("data:image/png;base64,\(zoomIconBase64)==", "Zoom class")
-    }
-}
-

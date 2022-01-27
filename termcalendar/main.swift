@@ -49,7 +49,7 @@ struct termcalendar: ParsableCommand {
                                       lastDay: e,
                                       title: title,
                                       footnote: footnote)
-            let document = Presenter(q, weekWidth: 5).present()
+            let document = Presenter(q, generator: LaTeXGen(), weekWidth: 5).present()
             print(document.emit())
         }
         catch {
