@@ -3,6 +3,7 @@ import Foundation
 import ArgumentParser
 import EventKit
 
+
 struct termcalendar: ParsableCommand {
     
     @Argument(help: "The calendar to query.")
@@ -22,6 +23,12 @@ struct termcalendar: ParsableCommand {
     
     mutating func run() throws {
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.monthSymbols
+        var dayOfWeekName = dateFormatter.weekdaySymbols!
+        let sunday = dayOfWeekName.removeFirst()
+        dayOfWeekName.append(sunday)
+
         guard #available(macOS 10.15, *) else {
             debugPrint("ERROR: This code only runs on macOS 10.15 and up")
             return
@@ -49,7 +56,36 @@ struct termcalendar: ParsableCommand {
                                       lastDay: e,
                                       title: title,
                                       footnote: footnote)
-            let document = Presenter(q, generator: LaTeXGen(), weekWidth: 5).present()
+            let weekWidth = 5
+            
+            let document = Document(font: "times") {
+                Table(
+                    title: q.title,
+                    caption: q.footnote,
+                    header: TableHeader {
+                            
+                            ColumnHeader("Week")
+                            
+                            for name in dayOfWeekName[0..<weekWidth] {
+                                ColumnHeader("\(name)")
+                            }
+                        }) {
+                            for (weekIndex, week) in q.weeks.enumerated() {
+                                
+                                let firstDay = week.days.first!
+                                let lastDay = week.days.last!
+                                let headerText = firstDay.month == lastDay.month
+                                ? "\(dateFormatter.monthSymbols[firstDay.month.rawValue])"
+                                : "\(dateFormatter.monthSymbols[firstDay.month.rawValue]) - \(dateFormatter.monthSymbols[lastDay.month.rawValue])"
+                                
+                                Row(header: RowHeader(weekNumber: weekIndex+1, text: headerText)) {
+                                    for day in week.days[0..<weekWidth] {
+                                        DayCell(day: day)
+                                    }
+                                }
+                            }
+                        }
+                }
             print(document.emit())
         }
         catch {
