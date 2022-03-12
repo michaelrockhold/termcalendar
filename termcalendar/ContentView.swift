@@ -7,6 +7,7 @@
 
 import SwiftUI
 import EventKit
+import AppKit
 
 extension UUID: Identifiable {
     public var id: String {
@@ -24,6 +25,7 @@ struct ContentView: View {
     
     @State private var titleText = ""
     @State private var footnoteText = ""
+    @State private var fontname = "Times"
     
     @State private var selectedCalendar = UUID.zero
     
@@ -67,6 +69,8 @@ struct ContentView: View {
             
             TextField("Footnote", text: $footnoteText)
             
+            TextField("Font", text: $fontname)
+            
             DatePicker("First Day",
                        selection: $firstDayPickerSelection,
                        displayedComponents: [.date])
@@ -80,6 +84,7 @@ struct ContentView: View {
                 .onChange(of: lastDayPickerSelection) {newValue in
                     print(newValue)
                 }
+            
             
             Button(action: {
                 
@@ -96,7 +101,12 @@ struct ContentView: View {
     
     
     func createCalendarGrid() {
-        
+        let dateFormatter = DateFormatter()
+        var dayOfWeekName = dateFormatter.weekdaySymbols!
+        let sunday = dayOfWeekName.removeFirst()
+        dayOfWeekName.append(sunday)
+        let weekWidth = 5
+                
         guard let eventCalendar = store.calendar(where: { c in UUID(uuidString: c.calendarIdentifier)! == selectedCalendar }) else {
             
             print(Quartermaster.QuartermasterError.NoMatchingCalendar)
@@ -112,13 +122,40 @@ struct ContentView: View {
                                       lastDay: lastDayPickerSelection,
                                       title: titleText,
                                       footnote: footnoteText)
-            let document = Presenter(q, weekWidth: 5).present()
+            let document = Document(font: fontname) {
+                Table(
+                    title: q.title,
+                    caption: q.footnote,
+                    header: TableHeader {
+                            
+                            ColumnHeader("Week")
+                            
+                            for name in dayOfWeekName[0..<weekWidth] {
+                                ColumnHeader("\(name)")
+                            }
+                        }) {
+                            for (weekIndex, week) in q.weeks.enumerated() {
+                                
+                                let firstDay = week.days.first!
+                                let lastDay = week.days.last!
+                                let headerText = firstDay.month == lastDay.month
+                                ? "\(dateFormatter.monthSymbols[firstDay.month.rawValue])"
+                                : "\(dateFormatter.monthSymbols[firstDay.month.rawValue]) - \(dateFormatter.monthSymbols[lastDay.month.rawValue])"
+                                
+                                Row(header: RowHeader(weekNumber: weekIndex+1, text: headerText)) {
+                                    for day in week.days[0..<weekWidth] {
+                                        DayCell(day: day)
+                                    }
+                                }
+                            }
+                        }
+                }
             let text = document.emit()
             
             // generate temporary file
             let filemanager = FileManager.default
             let tempDirURL = filemanager.temporaryDirectory
-            let fileURL = tempDirURL.appendingPathComponent(UUID().uuidString).appendingPathExtension("html")
+            let fileURL = tempDirURL.appendingPathComponent(UUID().uuidString).appendingPathExtension("tex")
             
             // write content to it
             try text.write(to: fileURL, atomically: true, encoding: .utf8)

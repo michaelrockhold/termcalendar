@@ -21,6 +21,11 @@
 		2E25DA7227971C4A00DEB33C /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E09D4DF27891F7800D8AE8A /* icons.swift */; };
 		2E25DA7A27A2277100DEB33C /* DocumentStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E25DA7927A2277100DEB33C /* DocumentStructure.swift */; };
 		2E25DA7B27A2277100DEB33C /* DocumentStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E25DA7927A2277100DEB33C /* DocumentStructure.swift */; };
+		2E63DA5127D4263C00621C68 /* zoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EF9276D27C3EAD800C3EDBA /* zoom.png */; };
+		2E63DA5227D4264200621C68 /* nothing.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EF9276F27C3EAD800C3EDBA /* nothing.png */; };
+		2E63DA5327D4264200621C68 /* canvas.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EF9277127C3EAD800C3EDBA /* canvas.png */; };
+		2E63DA5427D4264200621C68 /* classroom.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EF9277027C3EAD800C3EDBA /* classroom.png */; };
+		2E63DA5527D4264200621C68 /* noclass.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EF9276E27C3EAD800C3EDBA /* noclass.png */; };
 		2E8EB6B62787F0A2003B0981 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 2E8EB6B52787F0A2003B0981 /* ArgumentParser */; settings = {ATTRIBUTES = (Required, ); }; };
 		2E8EB6BA27881360003B0981 /* NSObject+EventKitHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */; };
 		2EFA177327854F9E00DC8304 /* Quartermaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFA176F27854F9E00DC8304 /* Quartermaster.swift */; };
@@ -56,6 +61,11 @@
 		2E8EB6B72788135F003B0981 /* termcalendar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "termcalendar-Bridging-Header.h"; sourceTree = "<group>"; };
 		2E8EB6B827881360003B0981 /* NSObject+EventKitHack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+EventKitHack.h"; sourceTree = "<group>"; };
 		2E8EB6B927881360003B0981 /* NSObject+EventKitHack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+EventKitHack.m"; sourceTree = "<group>"; };
+		2EF9276D27C3EAD800C3EDBA /* zoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoom.png; sourceTree = "<group>"; };
+		2EF9276E27C3EAD800C3EDBA /* noclass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noclass.png; sourceTree = "<group>"; };
+		2EF9276F27C3EAD800C3EDBA /* nothing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nothing.png; sourceTree = "<group>"; };
+		2EF9277027C3EAD800C3EDBA /* classroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = classroom.png; sourceTree = "<group>"; };
+		2EF9277127C3EAD800C3EDBA /* canvas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = canvas.png; sourceTree = "<group>"; };
 		2EFA175E27854B3C00DC8304 /* termcalendar */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = termcalendar; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EFA176F27854F9E00DC8304 /* Quartermaster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quartermaster.swift; sourceTree = "<group>"; };
 		2EFA177127854F9E00DC8304 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -111,6 +121,18 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		2EF9276C27C3EAD800C3EDBA /* images */ = {
+			isa = PBXGroup;
+			children = (
+				2EF9276D27C3EAD800C3EDBA /* zoom.png */,
+				2EF9276E27C3EAD800C3EDBA /* noclass.png */,
+				2EF9276F27C3EAD800C3EDBA /* nothing.png */,
+				2EF9277027C3EAD800C3EDBA /* classroom.png */,
+				2EF9277127C3EAD800C3EDBA /* canvas.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		2EFA175527854B3C00DC8304 = {
 			isa = PBXGroup;
 			children = (
@@ -143,6 +165,7 @@
 				2E09D4F82791110100D8AE8A /* EKEventStore+Hack.swift */,
 				2E25DA702795C35900DEB33C /* ResultBuilderTemplate.swift */,
 				2E25DA7927A2277100DEB33C /* DocumentStructure.swift */,
+				2EF9276C27C3EAD800C3EDBA /* images */,
 			);
 			path = termcalendar;
 			sourceTree = "<group>";
@@ -234,7 +257,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E09D4F2278EA29400D8AE8A /* Preview Assets.xcassets in Resources */,
+				2E63DA5227D4264200621C68 /* nothing.png in Resources */,
 				2E09D4EF278EA29400D8AE8A /* Assets.xcassets in Resources */,
+				2E63DA5527D4264200621C68 /* noclass.png in Resources */,
+				2E63DA5427D4264200621C68 /* classroom.png in Resources */,
+				2E63DA5327D4264200621C68 /* canvas.png in Resources */,
+				2E63DA5127D4263C00621C68 /* zoom.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,12 +316,14 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TermCalendar/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "TermCalendar needs access to your calendars in order to display that info in the output table.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.appel-rockhold.TermCalendar";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -318,12 +348,14 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TermCalendar/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "TermCalendar needs access to your calendars in order to display that info in the output table.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.appel-rockhold.TermCalendar";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -24,7 +24,6 @@ struct termcalendar: ParsableCommand {
     mutating func run() throws {
         
         let dateFormatter = DateFormatter()
-        dateFormatter.monthSymbols
         var dayOfWeekName = dateFormatter.weekdaySymbols!
         let sunday = dayOfWeekName.removeFirst()
         dayOfWeekName.append(sunday)

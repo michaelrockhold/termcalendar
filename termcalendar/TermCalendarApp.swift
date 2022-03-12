@@ -12,8 +12,9 @@ import EventKit
 struct TermCalendarApp: App {
     
     let store = EKEventStore.getStore()
-
+    
     var body: some Scene {
+        
         WindowGroup {
             ContentView(store: store)
         }

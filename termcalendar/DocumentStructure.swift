@@ -143,9 +143,12 @@ struct Document {
     }
     
     func emit() -> String {
+
         return """
                 \\documentclass{article}
-                \\usepackage{\(font)}
+                \\usepackage{fontspec}
+                \\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+                \\setmainfont{\(font)}
                 \\usepackage{graphicx}
                 \\usepackage[export]{adjustbox}
                 \\usepackage{color}
@@ -157,7 +160,7 @@ struct Document {
                  left=16mm,
                  top=4mm,
                  }
-                \\graphicspath{ {./images/} }
+                \\graphicspath{ {\(Bundle.main.resourcePath!)} }
                 \\begin{document}
                 \\thispagestyle{empty} %suppress page number
                 
@@ -285,7 +288,7 @@ struct DayCell {
             case .Zoom:
                 iconName = "zoom.png"
             default:
-                iconName = "classroom.png"
+                iconName = "nothing.png"
                 break
             }
         }
@@ -293,7 +296,7 @@ struct DayCell {
 
     func emit() -> String {
         return """
-            \\colorbox[gray]{\(bgColor)}{\\begin{minipage}[c][\(height)][t]{\(width)}\(dayth)\\raisebox{-2ex}{\\includegraphics[width=6mm,height=6mm,angle=0,center]{images/\(iconName)}}\\begin{center}\(info)\\end{center}
+            \\colorbox[gray]{\(bgColor)}{\\begin{minipage}[c][\(height)][t]{\(width)}\(dayth)\\raisebox{-2ex}{\\includegraphics[width=6mm,height=6mm,angle=0,center]{\(iconName)}}\\begin{center}\(info)\\end{center}
             \\end{minipage}}
         """
     }
