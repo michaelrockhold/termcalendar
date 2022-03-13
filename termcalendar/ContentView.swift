@@ -24,11 +24,7 @@ struct ContentView: View {
     private let calendarIDs: [UUID]
     
     @State private var titleText = ""
-    @State private var footnoteText = ""
-    @State private var fontname = "Times"
-    
     @State private var selectedCalendar = UUID.zero
-    
     @State private var firstDayPickerSelection = Date()
     @State private var lastDayPickerSelection = Date()
     
@@ -48,7 +44,6 @@ struct ContentView: View {
     
     func saveNotAvailable() -> Bool {
         return !(titleText != ""
-                 && footnoteText != ""
                  && firstDayPickerSelection.advanced(by: 60*60*24*60) < lastDayPickerSelection
                  && selectedCalendar != UUID.zero)
     }
@@ -66,11 +61,7 @@ struct ContentView: View {
             }
             
             TextField("Title", text: $titleText)
-            
-            TextField("Footnote", text: $footnoteText)
-            
-            TextField("Font", text: $fontname)
-            
+                                    
             DatePicker("First Day",
                        selection: $firstDayPickerSelection,
                        displayedComponents: [.date])
@@ -91,7 +82,7 @@ struct ContentView: View {
                 createCalendarGrid()
                 
             }) {
-                Label("Open in Browser", systemImage: "safari")
+                Label("Create and Open", systemImage: "safari")
             }
             .disabled(saveNotAvailable())
         }
@@ -108,7 +99,6 @@ struct ContentView: View {
         let weekWidth = 5
                 
         guard let eventCalendar = store.calendar(where: { c in UUID(uuidString: c.calendarIdentifier)! == selectedCalendar }) else {
-            
             print(Quartermaster.QuartermasterError.NoMatchingCalendar)
             return
         }
@@ -120,16 +110,12 @@ struct ContentView: View {
             let q = try Quartermaster(events: events,
                                       firstDay: firstDayPickerSelection,
                                       lastDay: lastDayPickerSelection,
-                                      title: titleText,
-                                      footnote: footnoteText)
-            let document = Document(font: fontname) {
+                                      title: titleText)
+            let document = Document {
                 Table(
                     title: q.title,
-                    caption: q.footnote,
                     header: TableHeader {
-                            
                             ColumnHeader("Week")
-                            
                             for name in dayOfWeekName[0..<weekWidth] {
                                 ColumnHeader("\(name)")
                             }
@@ -155,7 +141,7 @@ struct ContentView: View {
             // generate temporary file
             let filemanager = FileManager.default
             let tempDirURL = filemanager.temporaryDirectory
-            let fileURL = tempDirURL.appendingPathComponent(UUID().uuidString).appendingPathExtension("tex")
+            let fileURL = tempDirURL.appendingPathComponent(q.title).appendingPathExtension("tsv")
             
             // write content to it
             try text.write(to: fileURL, atomically: true, encoding: .utf8)

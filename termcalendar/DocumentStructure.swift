@@ -135,91 +135,52 @@ struct RowsBuilder {
 
 struct Document {
     let contents: [Element]
-    let font: String
 
-    init(font: String, @DocumentBuilder _ contentsFn: () -> [Element]) {
-        self.font = font
+    init(@DocumentBuilder _ contentsFn: () -> [Element]) {
         self.contents = contentsFn()
     }
     
     func emit() -> String {
 
-        return """
-                \\documentclass{article}
-                \\usepackage{fontspec}
-                \\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-                \\setmainfont{\(font)}
-                \\usepackage{graphicx}
-                \\usepackage[export]{adjustbox}
-                \\usepackage{color}
-                \\usepackage{blindtext}
-                \\usepackage{geometry}
-                \\geometry{
-                 letterpaper,
-                 total={170mm,257mm},
-                 left=16mm,
-                 top=4mm,
-                 }
-                \\graphicspath{ {\(Bundle.main.resourcePath!)} }
-                \\begin{document}
-                \\thispagestyle{empty} %suppress page number
-                
-                """
-                + contents.map {
+        return contents.map {
                     $0.emit()
                 }
                 .joined(separator: "\n")
-               + """
-                \\end{document}
-                """
     }
 }
 
 struct Table: Element {
     let title: String
-    let caption: String
     let header: TableHeader
     let rows: [Row]
     
-    init(title: String, caption: String, header: TableHeader, @RowsBuilder rowsFn: () -> [Row]) {
+    init(title: String, header: TableHeader, @RowsBuilder rowsFn: () -> [Row]) {
         self.title = title
-        self.caption = caption
         self.header = header
         self.rows = rowsFn()
     }
     
     func emit() -> String {
 
-        return """
-        \\begin{table}
-            \\centering\\small
-            {\\large {\(title)}}\\\\
-            \\vspace{0.6 em}
-        """
+        return ""
         + header.emit()
         + "\n"
         + rows.map {
             $0.emit()
         }
         .joined(separator: "\n")
-        + """
-            \\end{tabular}\\\\
-            \\vspace{1.0 em}
-            \(caption)
-            \\end{table}
-            """
     }
 }
 
 struct RowHeader {
     let weekNumber: Int
     let text: String
-    let height = "1.9cm"
-    let width = "2cm"
 
-    func emit() -> String {
-        return "{\\colorbox[gray]{0.75}{\\parbox[c][\(height)][c]{\(width)}{\\begin{center}\(weekNumber)\\end{center}\\begin{center}\(text)\\end{center}}}}"
-    }
+    func emit() -> String { """
+        \"\(weekNumber)
+        
+        \(text)\"
+        """ }
 }
 
 struct ColumnHeader {
@@ -229,9 +190,7 @@ struct ColumnHeader {
         text = t
     }
     
-    func emit() -> String {
-        "\\multicolumn{1}{c}{\\textit{\(text)}}"
-    }
+    func emit() -> String { text }
 }
 
 struct TableHeader {
@@ -242,63 +201,40 @@ struct TableHeader {
     }
 
     func emit() -> String {
-        let fmts = [String](repeating: "c", count: columnHeaders.count)
-        let format = "\\begin{tabular}{|" + fmts.map { "@{}\($0)@{}" }.joined(separator: "|") + "|}"
-
-        return format
-            + "\n"
-            + columnHeaders.map {
+        return
+            columnHeaders.map {
                 $0.emit()
             }
-            .joined(separator: "\n&")
-            + "\\\\ \\hline"
+            .joined(separator: "\t")
     }
 }
 
-
 struct DayCell {
 
-    let height: String
-    let width: String
-    let dayth: String   // short cardinal value of the day of the month, eg 1st, 2nd, 3rd
-    let info: String    // very short lines of text
-    let iconName: String
-    let bgColor: Float  // 0..<1, smaller is darker
+    let day: Day
     
-    init(day: Day, height: String = "1.8cm", width: String = "2.6cm") {
-        
-        self.height = height
-        self.width = width
-        
-        self.bgColor = day.inSession ? 1.0 : 0.9
-        self.dayth = Formatter.ordinal(day.dayOfMonth)
-        
-        if let e = day.events.first {
-            self.info = e
-        } else {
-            self.info = ""
-        }
-        
-        if !day.inSession {
-            iconName = "noclass.png"
-        } else {
-            switch day.icon {
-            case .Canvas:
-                iconName = "canvas.png"
-            case .Zoom:
-                iconName = "zoom.png"
-            default:
-                iconName = "nothing.png"
-                break
-            }
-        }
+    init(day: Day) {
+        self.day = day
     }
 
     func emit() -> String {
+        //self.dayth = Formatter.ordinal(day.dayOfMonth)
+        
+        let styles = day.attributes.joined()
+                
+        let info = day.events.map { event in
+                    """
+                    \(event)
+                    
+                    """
+        }.joined(separator: "")
+
+        
         return """
-            \\colorbox[gray]{\(bgColor)}{\\begin{minipage}[c][\(height)][t]{\(width)}\(dayth)\\raisebox{-2ex}{\\includegraphics[width=6mm,height=6mm,angle=0,center]{\(iconName)}}\\begin{center}\(info)\\end{center}
-            \\end{minipage}}
-        """
+            \"\(day.dayOfMonth) \(styles)
+            
+            \(info)\"
+            """
     }
 }
 
@@ -313,12 +249,11 @@ struct Row {
 
     func emit() -> String {
         return header.emit()
-        + " &\n"
+        + "\t"
         + cells.map {
             $0.emit()
         }
-        .joined(separator: " &\n")
-        + " \\\\ \\hline"
+        .joined(separator: "\t")
     }
 }
 

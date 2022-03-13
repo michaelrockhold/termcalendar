@@ -17,10 +17,7 @@ struct termcalendar: ParsableCommand {
     
     @Argument(help: "The title to display at the top.")
     var title: String
-    
-    @Argument(help: "The footnote to display at the bottom.")
-    var footnote: String
-    
+        
     mutating func run() throws {
         
         let dateFormatter = DateFormatter()
@@ -53,20 +50,18 @@ struct termcalendar: ParsableCommand {
             let q = try Quartermaster(events: events,
                                       firstDay: b,
                                       lastDay: e,
-                                      title: title,
-                                      footnote: footnote)
+                                      title: title)
             let weekWidth = 5
             
-            let document = Document(font: "times") {
+            let document = Document {
                 Table(
                     title: q.title,
-                    caption: q.footnote,
                     header: TableHeader {
                             
                             ColumnHeader("Week")
                             
                             for name in dayOfWeekName[0..<weekWidth] {
-                                ColumnHeader("\(name)")
+                                ColumnHeader(name)
                             }
                         }) {
                             for (weekIndex, week) in q.weeks.enumerated() {

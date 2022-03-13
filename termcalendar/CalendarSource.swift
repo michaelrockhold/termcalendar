@@ -3,23 +3,20 @@ import Metal
 
 
 struct Day {
-    enum Icon: String {
-        case Canvas = "Canvas_Blue"
-        case Zoom = "ZPLogo"
-    }
     
     let dayOfMonth: Int
     let month: CalendarConstants.Month
-    var inSession: Bool = true
+    var attributes = [String]()
     var events = [String](repeating: "", count: 2)
-    var icon: Icon? = nil
     
-    init(month: CalendarConstants.Month, day: Int, inSession: Bool = true, events: [String] = [], icon: Icon? = nil) {
+    init(month: CalendarConstants.Month, day: Int, inSession: Bool = true, events: [String] = [], attributes: [String] = []) {
         self.month = month
         self.dayOfMonth = day
-        self.inSession = inSession
         self.events = events
-        self.icon = icon
+        self.attributes = attributes
+        if !inSession {
+            self.attributes.append("[NO CLASS]")
+        }
     }
 }
 
@@ -76,6 +73,5 @@ enum CalendarConstants: Int {
 
 protocol CalendarSource {
     var title: String { get }
-    var footnote: String { get }
     var weeks: [Week] { get }
 }

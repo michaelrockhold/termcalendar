@@ -53,17 +53,10 @@ extension EventMap {
 
         let defaultDay = Day(date)
         var day = self[defaultDay.shortDate, default: defaultDay]
-        if event.first != "[" {
-            day.events.append(event)
+        if event.first == "[" && event.last == "]"  {
+            day.attributes.append(event)
         } else {
-            if day.inSession {
-                day.inSession = event != "[NO CLASS]"
-            }
-            if event == "[CANVAS]" {
-                day.icon = .Canvas
-            } else if event == "[ZOOM]" {
-                day.icon = .Zoom
-            }
+            day.events.append(event)
         }
         self[day.shortDate] = day
     }
@@ -78,17 +71,14 @@ class Quartermaster: CalendarSource {
     }
     
     let title: String
-    let footnote: String
     let weeks: [Week]
     
     init(events: [EKEvent],
          firstDay b: Date,
          lastDay e: Date,
-         title: String,
-         footnote: String) throws {
+         title: String) throws {
         
         self.title = title
-        self.footnote = footnote
         let session = DateInterval(start: b, end: e)
                 
         let formatter = DateFormatter()
